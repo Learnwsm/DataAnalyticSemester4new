@@ -170,7 +170,7 @@ elif page == "Bivariate EDA":
                 fig.update_layout(bargap=0.1)
             else:
                 fig = px.box(df, x='HeartAttack', y=col, title=f'{col} Distribution by Heart Attack')
-                df.groupby('HeartAttack')['cholesterol'].count()
+                st.write(df.groupby('HeartAttack')['cholesterol'].count())
             st.plotly_chart(fig)
 elif page == "Heatmap" : 
     st.title("Heatmap All Features")
