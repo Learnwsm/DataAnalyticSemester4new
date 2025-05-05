@@ -325,12 +325,12 @@ elif page == "Prediction":
     st.subheader("\n==== Validation Data Evaluation ====")
     st.write("Accuracy:", accuracy_score(y_val, y_val_pred))
     st.write("F1 Score:", f1_score(y_val, y_val_pred, zero_division=0))
-    st.write("Classification Report:\n", classification_report(y_val, y_val_pred, zero_division=0))
+    st.text("Classification Report:\n" + classification_report(y_val, y_val_pred, zero_division=0))
 
     st.subheader("\n==== Testing Data Evaluation ====")
     st.write("Accuracy:", accuracy_score(y_test, y_test_pred))
     st.write("F1 Score:", f1_score(y_test, y_test_pred, zero_division=0))
-    st.write("Classification Report:\n", classification_report(y_test, y_test_pred, zero_division=0))
+    st.text("Classification Report:\n" + classification_report(y_test, y_test_pred, zero_division=0))
     
     st.subheader("🧾 Confusion Matrix (Table View)")
     cm_table = confusion_matrix(y_test, y_test_pred)
@@ -685,7 +685,7 @@ elif page == "Prediction":
     st.write("Accuracy:", accuracy_score(y_test, y_test_pred))
     st.text(classification_report(y_test, y_test_pred, zero_division=0))
 
-    st.subheader("🧾 Confusion Matrix (Table View)")
+    st.subheader("Confusion Matrix (Table View)")
     cm_table = confusion_matrix(y_test, y_test_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
