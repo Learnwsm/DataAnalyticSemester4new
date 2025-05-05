@@ -246,7 +246,6 @@ elif page == "Prediction":
     X_train, X_temp, y_train, y_temp = train_test_split(X_scaled, y, test_size=0.3, stratify=y, random_state=42)
     X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.6666, stratify=y_temp, random_state=42)
 
-    # Re-scale (optional)
     X_train_scaled = scaler.fit_transform(X_train)
     X_val_scaled = scaler.transform(X_val)
     X_test_scaled = scaler.transform(X_test)
@@ -319,10 +318,10 @@ elif page == "Prediction":
     y_test_pred = rf_model.predict(X_test_scaled)
 
     # Display evaluation metrics
-    st.subheader("==== Training Data Evaluation ====")
-    st.write("Accuracy:", accuracy_score(y_train_smote, y_train_pred))
-    st.write("F1 Score:", f1_score(y_train_smote, y_train_pred, zero_division=0))
-    st.write("Classification Report:\n", classification_report(y_train_smote, y_train_pred, zero_division=0))
+    # st.subheader("==== Training Data Evaluation ====")
+    # st.write("Accuracy:", accuracy_score(y_train_smote, y_train_pred))
+    # st.write("F1 Score:", f1_score(y_train_smote, y_train_pred, zero_division=0))
+    # st.write("Classification Report:\n", classification_report(y_train_smote, y_train_pred, zero_division=0))
 
     st.subheader("\n==== Validation Data Evaluation ====")
     st.write("Accuracy:", accuracy_score(y_val, y_val_pred))
@@ -388,10 +387,10 @@ elif page == "Prediction":
     y_test_pred = rf_model.predict(X_test_scaled)
 
     # Evaluation Outputs
-    st.subheader("Training Data Evaluation")
-    st.write("Accuracy:", accuracy_score(y_train_down, y_train_pred))
-    st.write("F1 Score:", f1_score(y_train_down, y_train_pred))
-    st.text("Classification Report:\n" + classification_report(y_train_down, y_train_pred, zero_division=0))
+    # st.subheader("Training Data Evaluation")
+    # st.write("Accuracy:", accuracy_score(y_train_down, y_train_pred))
+    # st.write("F1 Score:", f1_score(y_train_down, y_train_pred))
+    # st.text("Classification Report:\n" + classification_report(y_train_down, y_train_pred, zero_division=0))
 
     st.subheader("Validation Data Evaluation")
     st.write("Accuracy:", accuracy_score(y_val, y_val_pred))
@@ -467,10 +466,10 @@ elif page == "Prediction":
     classification_report_test_rf = classification_report(y_test, y_test_rf_pred, zero_division=0)
     classification_report_val_rf = classification_report(y_val, y_val_rf_pred, zero_division=0)
 
-    st.write("Accuracy (Test):", accuracy_test_rf)
     st.write("Accuracy (Validation):", accuracy_val_rf)
-    st.write("\nClassification Report (Test):\n", classification_report_test_rf)
+    st.write("Accuracy (Test):", accuracy_test_rf)
     st.write("\nClassification Report (Validation):\n", classification_report_val_rf)
+    st.write("\nClassification Report (Test):\n", classification_report_test_rf)
 
     cm = confusion_matrix(y_test, y_test_rf_pred)
     disp = ConfusionMatrixDisplay(confusion_matrix=cm)
@@ -526,16 +525,16 @@ elif page == "Prediction":
     HA_Yes_percentage = np.mean(y_test_pred) * 100
     HA_No_percentage = 100 - HA_Yes_percentage
 
-    st.subheader("📈 Heart Attack Probability Prediction")
-    st.write(f"Probability of HeartAttack = Yes: {HA_Yes_percentage:.2f}%")
-    st.write(f"Probability of HeartAttack = No: {HA_No_percentage:.2f}%")
+    # st.subheader("📈 Heart Attack Probability Prediction")
+    # st.write(f"Probability of HeartAttack = Yes: {HA_Yes_percentage:.2f}%")
+    # st.write(f"Probability of HeartAttack = No: {HA_No_percentage:.2f}%")
 
     # Evaluation - Train
-    st.subheader("✅ Training Data Evaluation")
-    st.write("Accuracy:", accuracy_score(y_train, y_train_pred))
-    st.write("F1 Score:", f1_score(y_train, y_train_pred, zero_division=0))
-    st.text("Classification Report:")
-    st.text(classification_report(y_train, y_train_pred, zero_division=0))
+    # st.subheader("✅ Training Data Evaluation")
+    # st.write("Accuracy:", accuracy_score(y_train, y_train_pred))
+    # st.write("F1 Score:", f1_score(y_train, y_train_pred, zero_division=0))
+    # st.text("Classification Report:")
+    # st.text(classification_report(y_train, y_train_pred, zero_division=0))
 
     # Evaluation - Validation
     st.subheader("✅ Validation Data Evaluation")
@@ -602,15 +601,15 @@ elif page == "Prediction":
     HA_Yes_percentage = np.mean(y_test_pred) * 100
     HA_No_percentage = 100 - HA_Yes_percentage
 
-    st.subheader("Heart Attack Probability Prediction")
-    st.write(f"Probability of HeartAttack = Yes: {HA_Yes_percentage:.2f}%")
-    st.write(f"Probability of HeartAttack = No: {HA_No_percentage:.2f}%")
+    # st.subheader("Heart Attack Probability Prediction")
+    # st.write(f"Probability of HeartAttack = Yes: {HA_Yes_percentage:.2f}%")
+    # st.write(f"Probability of HeartAttack = No: {HA_No_percentage:.2f}%")
 
     # Evaluation metrics
-    st.subheader("Training Evaluation")
-    st.write("Accuracy:", accuracy_score(y_train_smote, y_train_pred))
-    st.write("F1 Score:", f1_score(y_train_smote, y_train_pred, zero_division=0))
-    st.text(classification_report(y_train_smote, y_train_pred, zero_division=0))
+    # st.subheader("Training Evaluation")
+    # st.write("Accuracy:", accuracy_score(y_train_smote, y_train_pred))
+    # st.write("F1 Score:", f1_score(y_train_smote, y_train_pred, zero_division=0))
+    # st.text(classification_report(y_train_smote, y_train_pred, zero_division=0))
 
     st.subheader("Validation Evaluation")
     st.write("Accuracy:", accuracy_score(y_val, y_val_pred))
@@ -680,9 +679,9 @@ elif page == "Prediction":
     y_test_pred = logreg_under.predict(X_test_scaled)
 
     # --- Evaluation ---
-    st.subheader("Training Evaluation")
-    st.write("Accuracy:", accuracy_score(y_train_down, y_train_pred))
-    st.text(classification_report(y_train_down, y_train_pred, zero_division=0))
+    # st.subheader("Training Evaluation")
+    # st.write("Accuracy:", accuracy_score(y_train_down, y_train_pred))
+    # st.text(classification_report(y_train_down, y_train_pred, zero_division=0))
 
     st.subheader("Validation Evaluation")
     st.write("Accuracy:", accuracy_score(y_val, y_val_pred))
@@ -758,18 +757,18 @@ elif page == "Prediction":
     classification_report_test_logReg = classification_report(y_test, y_test_logReg_pred, zero_division=0)
     classification_report_val_logReg = classification_report(y_val, y_val_logReg_pred, zero_division=0)
 
-    print("Accuracy (Test):", accuracy_test_logReg)
     print("Accuracy (Validation):", accuracy_val_logReg)
-    print("\nClassification Report (Test):\n", classification_report_test_logReg)
+    print("Accuracy (Test):", accuracy_test_logReg)
     print("\nClassification Report (Validation):\n", classification_report_val_logReg)
+    print("\nClassification Report (Test):\n", classification_report_test_logReg)
 
-    cm = confusion_matrix(y_test, y_test_logReg_pred)
-    disp = ConfusionMatrixDisplay(confusion_matrix=cm)
-    fig, ax = plt.subplots()
-    disp.plot(ax=ax, cmap='Blues', colorbar=False)
-    plt.title("Confusion Matrix - Random Forest")
+    # cm = confusion_matrix(y_test, y_test_logReg_pred)
+    # disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+    # fig, ax = plt.subplots()
+    # disp.plot(ax=ax, cmap='Blues', colorbar=False)
+    # plt.title("Confusion Matrix - Random Forest")
     
-    st.pyplot(fig)
+    # st.pyplot(fig)
 
     st.subheader("🧾 Confusion Matrix (Table View)")
     cm_table = confusion_matrix(y_test, y_test_logReg_pred)
@@ -819,11 +818,11 @@ elif page == "Prediction":
     y_test_pred = (model.predict(X_test_scaled) > 0.5).astype(int)
 
     # --- Evaluation ---
-    st.subheader("Testing Accuracy")
-    st.write("Accuracy:", accuracy_score(y_test, y_test_pred))
+    # st.subheader("Testing Accuracy")
+    # st.write("Accuracy:", accuracy_score(y_test, y_test_pred))
 
-    st.subheader("Training Evaluation")
-    st.text(classification_report(y_train, y_train_pred, zero_division=0))
+    # st.subheader("Training Evaluation")
+    # st.text(classification_report(y_train, y_train_pred, zero_division=0))
 
     st.subheader("Validation Evaluation")
     st.text(classification_report(y_val, y_val_pred, zero_division=0))
@@ -888,10 +887,10 @@ elif page == "Prediction":
     y_test_pred = (model.predict(X_test_scaled) > 0.5).astype(int)
 
     # --- Evaluation ---
-    st.subheader("==== ANN (SMOTE - Oversampling) ====")
+    st.subheader("==== ANN (SMOTE Oversampling) ====")
 
-    st.subheader("Training Evaluation")
-    st.text(classification_report(y_train_smote, y_train_pred, zero_division=0))
+    # st.subheader("Training Evaluation")
+    # st.text(classification_report(y_train_smote, y_train_pred, zero_division=0))
 
     st.subheader("Validation Evaluation")
     st.text(classification_report(y_val, y_val_pred, zero_division=0))
@@ -975,8 +974,8 @@ elif page == "Prediction":
     # --- Evaluation ---
     st.subheader("==== ANN (Undersampling) ====")
 
-    st.subheader("Training Evaluation")
-    st.text(classification_report(y_train_down, y_train_pred, zero_division=0))
+    # st.subheader("Training Evaluation")
+    # st.text(classification_report(y_train_down, y_train_pred, zero_division=0))
 
     st.subheader("Validation Evaluation")
     st.text(classification_report(y_val, y_val_pred, zero_division=0))
