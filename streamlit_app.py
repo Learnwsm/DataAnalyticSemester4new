@@ -168,10 +168,11 @@ elif page == "Bivariate EDA":
             if df[col].dtype == 'object':
                 fig = px.histogram(df, x=col, color='HeartAttack', barmode='group', title=f'{col} vs Heart Attack')
                 fig.update_layout(bargap=0.1)
+                st.plotly_chart(fig)
             else:
                 fig = px.box(df, x='HeartAttack', y=col, title=f'{col} Distribution by Heart Attack')
+                st.plotly_chart(fig)
                 st.write(df.groupby('HeartAttack')[col].count())
-            st.plotly_chart(fig)
 elif page == "Heatmap" : 
     st.title("Heatmap All Features")
 
