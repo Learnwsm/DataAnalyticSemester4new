@@ -1,6 +1,4 @@
 import streamlit as st
-
-st.title("🎈 My new app")
 import plotly.express as px
 #common
 import pandas as pd
@@ -13,7 +11,6 @@ from sklearn.metrics import mean_squared_error,confusion_matrix, ConfusionMatrix
 from sklearn.utils import resample
 from imblearn.over_sampling import SMOTE, RandomOverSampler
 from sklearn.decomposition import PCA
-# from sklearn.
 
 #Random Forest
 from sklearn.ensemble import RandomForestClassifier
