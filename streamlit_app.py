@@ -367,8 +367,8 @@ elif page == "Prediction":
     X_train_down = train_downsampled.drop(columns=['HeartAttack'])
     y_train_down = train_downsampled['HeartAttack']
 
-    st.subheader("Class Distribution After Undersampling")
-    st.write(y_train_down.value_counts())
+    # st.subheader("Class Distribution After Undersampling")
+    # st.write(y_train_down.value_counts())
 
     # Feature Scaling
     scaler = StandardScaler()
@@ -384,12 +384,6 @@ elif page == "Prediction":
     y_train_pred = rf_model.predict(X_train_scaled)
     y_val_pred = rf_model.predict(X_val_scaled)
     y_test_pred = rf_model.predict(X_test_scaled)
-
-    # Evaluation Outputs
-    # st.subheader("Training Data Evaluation")
-    # st.write("Accuracy:", accuracy_score(y_train_down, y_train_pred))
-    # st.write("F1 Score:", f1_score(y_train_down, y_train_pred))
-    # st.text("Classification Report:\n" + classification_report(y_train_down, y_train_pred, zero_division=0))
 
     st.subheader("Validation Data Evaluation")
     st.write("Accuracy:", accuracy_score(y_val, y_val_pred))
@@ -466,17 +460,18 @@ elif page == "Prediction":
     classification_report_val_rf = classification_report(y_val, y_val_rf_pred, zero_division=0)
 
     st.write("Accuracy (Validation):", accuracy_val_rf)
+    st.text("\nClassification Report (Validation):\n", classification_report_val_rf)
+
     st.write("Accuracy (Test):", accuracy_test_rf)
-    st.write("\nClassification Report (Validation):\n", classification_report_val_rf)
-    st.write("\nClassification Report (Test):\n", classification_report_test_rf)
+    st.text("\nClassification Report (Test):\n", classification_report_test_rf)
 
-    cm = confusion_matrix(y_test, y_test_rf_pred)
-    disp = ConfusionMatrixDisplay(confusion_matrix=cm)
-    fig, ax = plt.subplots()
-    disp.plot(ax=ax, cmap='Blues', colorbar=False)
-    plt.title("Confusion Matrix - Random Forest")
+    # cm = confusion_matrix(y_test, y_test_rf_pred)
+    # disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+    # fig, ax = plt.subplots()
+    # disp.plot(ax=ax, cmap='Blues', colorbar=False)
+    # plt.title("Confusion Matrix - Random Forest")
 
-    st.pyplot(fig)
+    # st.pyplot(fig)
 
     cm_table = confusion_matrix(y_test, y_test_rf_pred)
     cm_df = pd.DataFrame(cm_table, 
