@@ -460,10 +460,10 @@ elif page == "Prediction":
     classification_report_val_rf = classification_report(y_val, y_val_rf_pred, zero_division=0)
 
     st.write("Accuracy (Validation):", accuracy_val_rf)
-    st.text("\nClassification Report (Validation):\n", classification_report_val_rf)
+    st.text("\nClassification Report (Validation):\n" + classification_report_val_rf)
 
     st.write("Accuracy (Test):", accuracy_test_rf)
-    st.text("\nClassification Report (Test):\n", classification_report_test_rf)
+    st.text("\nClassification Report (Test):\n" + classification_report_test_rf)
 
     # cm = confusion_matrix(y_test, y_test_rf_pred)
     # disp = ConfusionMatrixDisplay(confusion_matrix=cm)
