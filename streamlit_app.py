@@ -62,7 +62,7 @@ df['HeartAttack'] = df['HeartAttack'].map({'Yes': True, 'No': False})
 # Setup Streamlit pages
 # st.set_page_config(page_title="Heart Attack Dashboard", layout="wide")
 
-page = st.sidebar.selectbox("Select Page", ["Filtered Data", "Univariate EDA", "Bivariate EDA", "Heatmap_All_Features", "Heatmap_Numerical_Columns", "Prediction",])
+page = st.sidebar.selectbox("Select Page", ["Filtered Data", "Univariate EDA", "Bivariate EDA", "Heatmap", "Risk Factors", "Prediction",])
 
 # Filtered Data Page ================================================================================================= #
 if page == "Filtered Data":
@@ -171,8 +171,8 @@ elif page == "Bivariate EDA":
             else:
                 fig = px.box(df, x='HeartAttack', y=col, title=f'{col} Distribution by Heart Attack')
             st.plotly_chart(fig)
-elif page == "Heatmap_All_Features" : 
-    st.title("Correlation Matrix Heatmap")
+elif page == "Heatmap" : 
+    st.title("Heatmap All Features")
 
     # Make a copy of the dataset
     corr_data = df.copy()
@@ -206,8 +206,7 @@ elif page == "Heatmap_All_Features" :
     # Display the heatmap in Streamlit
     st.plotly_chart(fig_corr, use_container_width=True)
 
-elif page == "Heatmap_Numerical_Columns" : 
-    st.title("Correlation Matrix Heatmap")
+    st.title("Heatmap for Numerical Features")
 
     # Ensure 'HeartAttack' is numeric
     df['HeartAttack'] = df['HeartAttack'].replace({'Yes': 1, 'No': 0})
@@ -225,6 +224,45 @@ elif page == "Heatmap_Numerical_Columns" :
 
     # Display plot in Streamlit
     st.pyplot(fig)
+
+elif page == "Risk Factors": 
+    
+    st.title("Heart Attack Risk Factors - Feature Importance")
+
+    X = df.drop(columns=['HeartAttack', 'ID'])
+    y = df['HeartAttack']
+
+    # Encode categorical features
+    X = pd.get_dummies(X, drop_first=True)
+
+    # Scale numerical features
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+
+    # Split the data
+    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+
+    # Train the Random Forest model
+    rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
+    rf_model.fit(X_train, y_train)
+
+    # Get feature importances
+    effect = rf_model.feature_importances_
+    feature_importances = pd.Series(effect, index=X.columns).sort_values(ascending=False)
+
+    # Plotting in Streamlit
+    st.subheader("Top 10 Most Important Features")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.barplot(x=feature_importances.head(10).values, y=feature_importances.head(10).index, ax=ax)
+    ax.set_title('Heart Attack Risk Factors')
+    ax.set_xlabel('Importance')
+    ax.set_ylabel('Features')
+    st.pyplot(fig)
+
+    # Display the values
+    st.write("Top 10 most important features:")
+    st.dataframe(feature_importances.head(10).reset_index().rename(columns={'index': 'Feature', 0: 'Importance'}))
+
 elif page == "Prediction":
     st.title("Heart Attack Prediction")
 
