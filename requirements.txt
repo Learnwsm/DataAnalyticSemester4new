@@ -4,7 +4,7 @@ numpy
 pandas
 tensorflow
 imblearn
-sklearn
+scikit-learn
 seaborn
 keras
 streamlit
