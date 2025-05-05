@@ -169,7 +169,7 @@ elif page == "Bivariate EDA":
                 fig = px.histogram(df, x=col, color='HeartAttack', barmode='group', title=f'{col} vs Heart Attack')
                 fig.update_layout(bargap=0.1)
             else:
-                fig = px.density_contour(df, x=col, color='HeartAttack', title=f'{col} Density by Heart Attack', marginal_x="histogram")
+                fig = px.box(df, x='HeartAttack', y=col, title=f'{col} Distribution by Heart Attack')
                 st.plotly_chart(fig)
 elif page == "Heatmap" : 
     st.title("Heatmap All Features")
