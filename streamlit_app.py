@@ -54,7 +54,6 @@ arr = []
 for index, value in df['AlcoholConsumption'].items():
     if pd.isna(value):
         arr.append(index)
-        print(value, 'deleted')
 
 df = df.drop(arr)
 y = df['HeartAttack']
@@ -63,7 +62,7 @@ y = df['HeartAttack']
 df['HeartAttack'] = df['HeartAttack'].map({'Yes': True, 'No': False})
 
 # Setup Streamlit pages
-st.set_page_config(page_title="Heart Attack Dashboard", layout="wide")
+# st.set_page_config(page_title="Heart Attack Dashboard", layout="wide")
 
 page = st.sidebar.selectbox("Select Page", ["Filtered Data", "Univariate EDA", "Bivariate EDA", "Heatmap_All_Features", "Heatmap_Numerical_Columns", "Prediction",])
 
