@@ -1,2 +1,10 @@
 plotly
+matplotlib
+numpy<2
+pandas
+tensorflow
+imblearn
+scikit-learn
+seaborn
+keras
 streamlit
