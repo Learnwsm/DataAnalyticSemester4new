@@ -512,7 +512,7 @@ elif page == "Prediction":
     st.write("F1 Score:", f1_score(y_val, y_val_rf_pred))
     st.text("\nClassification Report (Validation):\n" + classification_report_val_rf)
 
-    cm_table = confusion_matrix(y_test, y_val_rf_pred)
+    cm_table = confusion_matrix(y_val, y_val_rf_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
                          index=['Actual No', 'Actual Yes'])
