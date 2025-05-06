@@ -308,6 +308,7 @@ elif page == "Prediction":
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
                          index=['Actual No', 'Actual Yes'])
+    st.write(cm_df)
 
     # Testing Evaluation
     st.subheader("✅ Testing Data Evaluation")
@@ -367,7 +368,7 @@ elif page == "Prediction":
     st.text("Classification Report:\n" + classification_report(y_val, y_val_pred, zero_division=0))
 
     st.subheader("Confusion Matrix (Validation)")
-    cm_table = confusion_matrix(y_test, y_test_pred)
+    cm_table = confusion_matrix(y_val, y_val_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
                          index=['Actual No', 'Actual Yes'])
@@ -744,6 +745,7 @@ elif page == "Prediction":
     # --- Evaluation ---
     st.subheader("✔️ Validation Evaluation")
     st.write("Accuracy:", accuracy_score(y_val, y_val_pred))
+    st.write("F1 Score:", f1_score(y_val, y_val_pred, zero_division=0))
     st.text(classification_report(y_val, y_val_pred, zero_division=0))
 
     st.subheader("Confusion Matrix (Validation)")
@@ -755,6 +757,7 @@ elif page == "Prediction":
 
     st.subheader("✅ Testing Evaluation")
     st.write("Accuracy:", accuracy_score(y_test, y_test_pred))
+    st.write("F1 Score:", f1_score(y_test, y_test_pred, zero_division=0))
     st.text(classification_report(y_test, y_test_pred, zero_division=0))
 
     st.subheader("Confusion Matrix (Test)")
@@ -823,11 +826,20 @@ elif page == "Prediction":
 
     st.write("✔️ Validation Data Evaluation")
     st.write("Accuracy:", accuracy_val_logReg)
+    st.write("F1 Score:", f1_score(y_val, y_val_logReg_pred, zero_division=0))
     st.text("\nClassification Report (Validation):\n"+ classification_report_val_logReg)
+
+    cm_table = confusion_matrix(y_val, y_val_logReg_pred)
+    cm_df = pd.DataFrame(cm_table, 
+                         columns=['Predicted No', 'Predicted Yes'], 
+                         index=['Actual No', 'Actual Yes'])
+    st.write(cm_df)
 
     st.write("✅ Testing Data Evaluation")
     st.write("Accuracy:", accuracy_test_logReg)
+    st.write("F1 Score:", f1_score(y_test, y_test_logReg_pred, zero_division=0))
     st.text("\nClassification Report (Test):\n" + classification_report_test_logReg)
+    
     st.subheader("Confusion Matrix (Test)")
     cm_table = confusion_matrix(y_test, y_test_logReg_pred)
     cm_df = pd.DataFrame(cm_table, 
@@ -882,13 +894,24 @@ elif page == "Prediction":
     # st.subheader("Training Evaluation")
     # st.text(classification_report(y_train, y_train_pred, zero_division=0))
 
-    st.subheader("Validation Evaluation")
+    st.subheader("✔️ Validation Data Evaluation")
+    st.write("Accuracy:", accuracy_score(y_val, y_val_pred))
+    st.write("F1 Score:", f1_score(y_val, y_val_pred, zero_division=0))
     st.text(classification_report(y_val, y_val_pred, zero_division=0))
 
-    st.subheader("Testing Evaluation")
+    st.subheader("Confusion Matrix (Validation)")
+    cm_table = confusion_matrix(y_val, y_val_pred)
+    cm_df = pd.DataFrame(cm_table, 
+                         columns=['Predicted No', 'Predicted Yes'], 
+                         index=['Actual No', 'Actual Yes'])
+    st.write(cm_df)
+
+    st.subheader("✅ Testing Evaluation")
+    st.write("Accuracy:", accuracy_score(y_test, y_test_pred))
+    st.write("F1 Score:", f1_score(y_test, y_test_pred, zero_division=0))
     st.text(classification_report(y_test, y_test_pred, zero_division=0))
 
-    st.subheader("🧾 Confusion Matrix (Table View)")
+    st.subheader("Confusion Matrix (Test)")
     cm_table = confusion_matrix(y_test, y_test_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
@@ -914,7 +937,7 @@ elif page == "Prediction":
     smote = SMOTE(random_state=42)
     X_train_smote, y_train_smote = smote.fit_resample(X_train, y_train)
 
-    st.subheader("[SMOTE] Class distribution after oversampling:")
+    st.subheader("Class distribution after SMOTE oversampling:")
     st.write(y_train_smote.value_counts())
 
     # --- Scaling ---
@@ -923,7 +946,7 @@ elif page == "Prediction":
     X_val_scaled = scaler.transform(X_val)
     X_test_scaled = scaler.transform(X_test)
 
-    # --- Build ANN Model ---
+    # Build ANN Model
     model = Sequential([
         Dense(64, activation='relu', input_shape=(X_train_scaled.shape[1],)),
         Dropout(0.3),
@@ -934,33 +957,38 @@ elif page == "Prediction":
 
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-    # --- Train Model ---
+    # Train Model
     history = model.fit(X_train_scaled, y_train_smote,
                         validation_data=(X_val_scaled, y_val),
                         epochs=5, batch_size=32, verbose=0)
 
-    # --- Predict ---
+    # Predict
     y_train_pred = (model.predict(X_train_scaled) > 0.5).astype(int)
     y_val_pred = (model.predict(X_val_scaled) > 0.5).astype(int)
     y_test_pred = (model.predict(X_test_scaled) > 0.5).astype(int)
 
-    # --- Evaluation ---
-    st.subheader("==== ANN (SMOTE Oversampling) ====")
-
+    # Evaluation 
     # st.subheader("Training Evaluation")
     # st.text(classification_report(y_train_smote, y_train_pred, zero_division=0))
 
-    st.subheader("Validation Evaluation")
+    st.subheader("✔️ Validation Evaluation")
+    st.write("Accuracy:", accuracy_score(y_val, y_val_pred))
+    st.write("F1 Score:", f1_score(y_val, y_val_pred, zero_division=0))
     st.text(classification_report(y_val, y_val_pred, zero_division=0))
 
-    st.subheader("Testing Evaluation")
+    st.subheader("Confusion Matrix (Validation)")
+    cm_table = confusion_matrix(y_val, y_val_pred)
+    cm_df = pd.DataFrame(cm_table, 
+                         columns=['Predicted No', 'Predicted Yes'], 
+                         index=['Actual No', 'Actual Yes'])
+    st.write(cm_df)
+
+    st.subheader("✅ Testing Evaluation")
+    st.write("Accuracy:", accuracy_score(y_test, y_test_pred))
+    st.write("F1 Score:", f1_score(y_test, y_test_pred, zero_division=0))
     st.text(classification_report(y_test, y_test_pred, zero_division=0))
 
-    # --- Accuracy Score ---
-    st.subheader("Final Test Accuracy")
-    st.write("Accuracy:", accuracy_score(y_test, y_test_pred))
-
-    st.subheader("🧾 Confusion Matrix (Table View)")
+    st.subheader("Confusion Matrix (Test)")
     cm_table = confusion_matrix(y_test, y_test_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
@@ -1029,23 +1057,24 @@ elif page == "Prediction":
     y_val_pred = (model.predict(X_val_scaled) > 0.5).astype(int)
     y_test_pred = (model.predict(X_test_scaled) > 0.5).astype(int)
 
-    # --- Evaluation ---
-    st.subheader("==== ANN (Undersampling) ====")
-
-    # st.subheader("Training Evaluation")
-    # st.text(classification_report(y_train_down, y_train_pred, zero_division=0))
-
-    st.subheader("Validation Evaluation")
+    st.subheader("✔️ Validation Evaluation")
+    st.write("Accuracy:", accuracy_score(y_val, y_val_pred))
+    st.write("F1 Score:", f1_score(y_val, y_val_pred, zero_division=0))
     st.text(classification_report(y_val, y_val_pred, zero_division=0))
 
-    st.subheader("Testing Evaluation")
+    st.subheader("Confusion Matrix (Validation)")
+    cm_table = confusion_matrix(y_val, y_val_pred)
+    cm_df = pd.DataFrame(cm_table, 
+                         columns=['Predicted No', 'Predicted Yes'], 
+                         index=['Actual No', 'Actual Yes'])
+    st.write(cm_df)
+
+    st.subheader("✅ Testing Evaluation")
+    st.write("Accuracy:", accuracy_score(y_test, y_test_pred))
+    st.write("F1 Score:", f1_score(y_test, y_test_pred, zero_division=0))
     st.text(classification_report(y_test, y_test_pred, zero_division=0))
 
-    # --- Accuracy Score ---
-    st.subheader("Final Test Accuracy")
-    st.write("Accuracy:", accuracy_score(y_test, y_test_pred))
-
-    st.subheader("🧾 Confusion Matrix (Table View)")
+    st.subheader("Confusion Matrix (Test)")
     cm_table = confusion_matrix(y_test, y_test_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
