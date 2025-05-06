@@ -32,13 +32,12 @@ from sklearn.inspection import permutation_importance
 csv_url = 'https://raw.githubusercontent.com/ctsfy/Data-Analytics-Heart-Attack-Prediction/refs/heads/main/heart_attack_indonesia.csv'
 df = pd.read_csv(csv_url)
 
-# Convert relevant columns to numeric
+# Convert numerical columns to numeric
 numerical_cols = ['Age', 'Cholesterol', 'BMI', 'SleepHours', 'AirQualityIndex']
 for col in numerical_cols:
     df[col] = pd.to_numeric(df[col], errors='coerce')
 
-# Drop rows with any remaining missing values
-
+#search for any missing value
 features_na = [features for features in df.columns if df[features].isnull().sum() > 0]
 
 if features_na:
@@ -49,6 +48,7 @@ else:
 
 arr = []
 
+# Drop rows with missing values
 for index, value in df['AlcoholConsumption'].items():
     if pd.isna(value):
         arr.append(index)
@@ -56,12 +56,10 @@ for index, value in df['AlcoholConsumption'].items():
 df = df.drop(arr)
 y = df['HeartAttack']
 
-# Convert HeartAttack to boolean
+# Convert HeartAttack to boolean (1 and 0)
 df['HeartAttack'] = df['HeartAttack'].map({'Yes': True, 'No': False})
 
-# Setup Streamlit pages
-# st.set_page_config(page_title="Heart Attack Dashboard", layout="wide")
-
+# Streamlit Page
 page = st.sidebar.selectbox("Select Page", ["Filtered Data", "Univariate EDA", "Bivariate EDA", "Heatmap", "Risk Factors", "Prediction",])
 
 # Filtered Data Page ================================================================================================= #
@@ -149,6 +147,7 @@ if page == "Filtered Data":
 
     st.dataframe(filtered_df)
 
+# Univariate EDA Page ====================================================================== #
 elif page == "Univariate EDA":
     st.title("Univariate Feature Distributions")
 
@@ -160,6 +159,8 @@ elif page == "Univariate EDA":
             fig.update_layout(bargap=0.1)
         st.plotly_chart(fig)
 
+
+# Bivariate EDA Page ====================================================================== #
 elif page == "Bivariate EDA":
     st.title("Bivariate Analysis: Feature vs HeartAttack")
 
@@ -176,10 +177,10 @@ elif page == "Bivariate EDA":
 elif page == "Heatmap" : 
     st.title("Heatmap All Features")
 
-    # Make a copy of the dataset
+    # copy the dataset
     corr_data = df.copy()
 
-    # Encode categorical and boolean columns safely
+    # Encode categorical and boolean columns
     for col in corr_data.columns:
         if corr_data[col].dtype == 'object' or corr_data[col].dtype == 'bool':
             try:
@@ -204,27 +205,25 @@ elif page == "Heatmap" :
         labels={'color': 'Correlation'},
         aspect="auto"
     )
-
-    # Display the heatmap in Streamlit
+    # Plot
     st.plotly_chart(fig_corr, use_container_width=True)
 
+    # Heatmap for Numerical Features ************************** #
     st.title("Heatmap for Numerical Features")
-
-    # Ensure 'HeartAttack' is numeric
     df['HeartAttack'] = df['HeartAttack'].replace({'Yes': 1, 'No': 0})
 
-    # Select only numeric columns
+    # Select only the numerical columns
     corr_data = df.select_dtypes(include=['int64', 'float64'])
 
-    # Calculate correlation matrix
+    # Correlation matrix
     corr_matrix = corr_data.corr()
 
-    # Plot heatmap using seaborn
+    # Plot heatmap for numerical features
     fig, ax = plt.subplots(figsize=(12, 10))
     sns.heatmap(corr_matrix, cmap='coolwarm', center=0, annot=True, ax=ax)
     ax.set_title("Correlation Matrix Heatmap")
 
-    # Display plot in Streamlit
+    #Plot
     st.pyplot(fig)
 
 elif page == "Risk Factors": 
@@ -294,25 +293,30 @@ elif page == "Prediction":
     rf_model.fit(X_train_scaled, y_train)
 
     # Predictions
-    # y_train_pred = rf_model.predict(X_train_scaled)
     y_val_pred = rf_model.predict(X_val_scaled)
     y_test_pred = rf_model.predict(X_test_scaled)
 
-    # --- Evaluation: Validation ---
-    st.subheader("✅ Validation Evaluation")
+    # Validation Evaluation
+    st.subheader("✔️ Validation Data Evaluation")
     st.write("Accuracy:", accuracy_score(y_val, y_val_pred))
     st.write("F1 Score:", f1_score(y_val, y_val_pred))
     st.text("Classification Report:")
     st.text(classification_report(y_val, y_val_pred, zero_division=0))
 
-    # --- Evaluation: Testing ---
-    st.subheader("✅ Testing Evaluation")
+    st.subheader("Confusion Matrix (Validation)")
+    cm_table = confusion_matrix(y_val, y_val_pred)
+    cm_df = pd.DataFrame(cm_table, 
+                         columns=['Predicted No', 'Predicted Yes'], 
+                         index=['Actual No', 'Actual Yes'])
+
+    # Testing Evaluation
+    st.subheader("✅ Testing Data Evaluation")
     st.write("Accuracy:", accuracy_score(y_test, y_test_pred))
     st.write("F1 Score:", f1_score(y_test, y_test_pred))
     st.text("Classification Report:")
     st.text(classification_report(y_test, y_test_pred, zero_division=0))
 
-    st.subheader("🧾 Confusion Matrix (Table View)")
+    st.subheader("Confusion Matrix (Test)")
     cm_table = confusion_matrix(y_test, y_test_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
@@ -356,18 +360,21 @@ elif page == "Prediction":
     y_val_pred = rf_model.predict(X_val_scaled)
     y_test_pred = rf_model.predict(X_test_scaled)
 
-    # Display evaluation metrics
-    # st.subheader("==== Training Data Evaluation ====")
-    # st.write("Accuracy:", accuracy_score(y_train_smote, y_train_pred))
-    # st.write("F1 Score:", f1_score(y_train_smote, y_train_pred, zero_division=0))
-    # st.write("Classification Report:\n", classification_report(y_train_smote, y_train_pred, zero_division=0))
-
-    st.subheader("\n==== Validation Data Evaluation ====")
+    # Validation Evaluation
+    st.subheader("\n✔️ Validation Data Evaluation")
     st.write("Accuracy:", accuracy_score(y_val, y_val_pred))
     st.write("F1 Score:", f1_score(y_val, y_val_pred, zero_division=0))
     st.text("Classification Report:\n" + classification_report(y_val, y_val_pred, zero_division=0))
 
-    st.subheader("\n==== Testing Data Evaluation ====")
+    st.subheader("🧾 Confusion Matrix (Table View)")
+    cm_table = confusion_matrix(y_test, y_test_pred)
+    cm_df = pd.DataFrame(cm_table, 
+                         columns=['Predicted No', 'Predicted Yes'], 
+                         index=['Actual No', 'Actual Yes'])
+    st.write(cm_df)
+
+    # Testing Evaluation
+    st.subheader("\n✅ Testing Data Evaluation")
     st.write("Accuracy:", accuracy_score(y_test, y_test_pred))
     st.write("F1 Score:", f1_score(y_test, y_test_pred, zero_division=0))
     st.text("Classification Report:\n" + classification_report(y_test, y_test_pred, zero_division=0))
@@ -425,17 +432,18 @@ elif page == "Prediction":
     y_val_pred = rf_model.predict(X_val_scaled)
     y_test_pred = rf_model.predict(X_test_scaled)
 
-    st.subheader("Validation Data Evaluation")
+    # Validation Evaluation
+    st.subheader("✔️ Validation Data Evaluation")
     st.write("Accuracy:", accuracy_score(y_val, y_val_pred))
     st.write("F1 Score:", f1_score(y_val, y_val_pred))
     st.text("Classification Report:\n" + classification_report(y_val, y_val_pred, zero_division=0))
 
-    st.subheader("Testing Data Evaluation")
+    st.subheader("✅ Testing Data Evaluation")
     st.write("Accuracy:", accuracy_score(y_test, y_test_pred))
     st.write("F1 Score:", f1_score(y_test, y_test_pred))
     st.text("Classification Report:\n" + classification_report(y_test, y_test_pred, zero_division=0))
 
-    st.subheader("🧾 Confusion Matrix (Table View)")
+    st.subheader("Confusion Matrix (Table View)")
     cm_table = confusion_matrix(y_test, y_test_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
@@ -499,10 +507,20 @@ elif page == "Prediction":
     classification_report_test_rf = classification_report(y_test, y_test_rf_pred, zero_division=0)
     classification_report_val_rf = classification_report(y_val, y_val_rf_pred, zero_division=0)
 
-    st.write("Accuracy (Validation):", accuracy_val_rf)
+    st.subheader("✔️ Validation Data Evaluation")
+    st.write("Accuracy :", accuracy_val_rf)
+    st.write("F1 Score:", f1_score(y_val, y_val_rf_pred))
     st.text("\nClassification Report (Validation):\n" + classification_report_val_rf)
 
-    st.write("Accuracy (Test):", accuracy_test_rf)
+    cm_table = confusion_matrix(y_test, y_val_rf_pred)
+    cm_df = pd.DataFrame(cm_table, 
+                         columns=['Predicted No', 'Predicted Yes'], 
+                         index=['Actual No', 'Actual Yes'])
+    st.write(cm_df)
+
+    st.subheader("✅ Testing Data Evaluation")
+    st.write("Accuracy :", accuracy_test_rf)
+    st.write("F1 Score:", f1_score(y_test, y_test_rf_pred))
     st.text("\nClassification Report (Test):\n" + classification_report_test_rf)
 
     # cm = confusion_matrix(y_test, y_test_rf_pred)
