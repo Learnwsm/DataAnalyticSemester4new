@@ -366,7 +366,7 @@ elif page == "Prediction":
     st.write("F1 Score:", f1_score(y_val, y_val_pred, zero_division=0))
     st.text("Classification Report:\n" + classification_report(y_val, y_val_pred, zero_division=0))
 
-    st.subheader("🧾 Confusion Matrix (Table View)")
+    st.subheader("Confusion Matrix (Validation)")
     cm_table = confusion_matrix(y_test, y_test_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
@@ -379,7 +379,7 @@ elif page == "Prediction":
     st.write("F1 Score:", f1_score(y_test, y_test_pred, zero_division=0))
     st.text("Classification Report:\n" + classification_report(y_test, y_test_pred, zero_division=0))
     
-    st.subheader("🧾 Confusion Matrix (Table View)")
+    st.subheader("Confusion Matrix (Test)")
     cm_table = confusion_matrix(y_test, y_test_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
@@ -438,12 +438,19 @@ elif page == "Prediction":
     st.write("F1 Score:", f1_score(y_val, y_val_pred))
     st.text("Classification Report:\n" + classification_report(y_val, y_val_pred, zero_division=0))
 
+    st.subheader("Confusion Matrix (Validation)")
+    cm_table = confusion_matrix(y_val, y_val_pred)
+    cm_df = pd.DataFrame(cm_table, 
+                         columns=['Predicted No', 'Predicted Yes'], 
+                         index=['Actual No', 'Actual Yes'])
+    st.write(cm_df)
+
     st.subheader("✅ Testing Data Evaluation")
     st.write("Accuracy:", accuracy_score(y_test, y_test_pred))
     st.write("F1 Score:", f1_score(y_test, y_test_pred))
     st.text("Classification Report:\n" + classification_report(y_test, y_test_pred, zero_division=0))
 
-    st.subheader("Confusion Matrix (Table View)")
+    st.subheader("Confusion Matrix (Test)")
     cm_table = confusion_matrix(y_test, y_test_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
@@ -512,6 +519,7 @@ elif page == "Prediction":
     st.write("F1 Score:", f1_score(y_val, y_val_rf_pred))
     st.text("\nClassification Report (Validation):\n" + classification_report_val_rf)
 
+    st.subheader("Confusion Matrix (Validation)")
     cm_table = confusion_matrix(y_val, y_val_rf_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
@@ -530,7 +538,7 @@ elif page == "Prediction":
     # plt.title("Confusion Matrix - Random Forest")
 
     # st.pyplot(fig)
-
+    st.subheader("Confusion Matrix (Test)")
     cm_table = confusion_matrix(y_test, y_test_rf_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
@@ -538,7 +546,6 @@ elif page == "Prediction":
     st.write(cm_df)
 
 #********************************************************************************#
-
 
     st.title("Normal Logistic Regression")
 
@@ -581,19 +588,20 @@ elif page == "Prediction":
     # st.write(f"Probability of HeartAttack = Yes: {HA_Yes_percentage:.2f}%")
     # st.write(f"Probability of HeartAttack = No: {HA_No_percentage:.2f}%")
 
-    # Evaluation - Train
-    # st.subheader("✅ Training Data Evaluation")
-    # st.write("Accuracy:", accuracy_score(y_train, y_train_pred))
-    # st.write("F1 Score:", f1_score(y_train, y_train_pred, zero_division=0))
-    # st.text("Classification Report:")
-    # st.text(classification_report(y_train, y_train_pred, zero_division=0))
-
     # Evaluation - Validation
     st.subheader("✅ Validation Data Evaluation")
     st.write("Accuracy:", accuracy_score(y_val, y_val_pred))
     st.write("F1 Score:", f1_score(y_val, y_val_pred, zero_division=0))
     st.text("Classification Report:")
     st.text(classification_report(y_val, y_val_pred, zero_division=0))
+
+    st.subheader("Confusion Matrix (Test)")
+    cm_table = confusion_matrix(y_val, y_val_pred)
+    cm_df = pd.DataFrame(cm_table, 
+                         columns=['Predicted No', 'Predicted Yes'], 
+                         index=['Actual No', 'Actual Yes'])
+    st.write(cm_df)
+
 
     # Evaluation - Test
     st.subheader("✅ Testing Data Evaluation")
@@ -602,7 +610,7 @@ elif page == "Prediction":
     st.text("Classification Report:")
     st.text(classification_report(y_test, y_test_pred, zero_division=0))
 
-    st.subheader("🧾 Confusion Matrix (Table View)")
+    st.subheader("Confusion Matrix (Test)")
     cm_table = confusion_matrix(y_test, y_test_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
@@ -657,23 +665,26 @@ elif page == "Prediction":
     # st.write(f"Probability of HeartAttack = Yes: {HA_Yes_percentage:.2f}%")
     # st.write(f"Probability of HeartAttack = No: {HA_No_percentage:.2f}%")
 
-    # Evaluation metrics
-    # st.subheader("Training Evaluation")
-    # st.write("Accuracy:", accuracy_score(y_train_smote, y_train_pred))
-    # st.write("F1 Score:", f1_score(y_train_smote, y_train_pred, zero_division=0))
-    # st.text(classification_report(y_train_smote, y_train_pred, zero_division=0))
+    # Validation Evaluation
 
-    st.subheader("Validation Evaluation")
+    st.subheader("✔️ Validation Evaluation")
     st.write("Accuracy:", accuracy_score(y_val, y_val_pred))
     st.write("F1 Score:", f1_score(y_val, y_val_pred, zero_division=0))
     st.text(classification_report(y_val, y_val_pred, zero_division=0))
 
-    st.subheader("Testing Evaluation")
+    st.subheader("Confusion Matrix (Validation)")
+    cm_table = confusion_matrix(y_val, y_val_pred)
+    cm_df = pd.DataFrame(cm_table, 
+                         columns=['Predicted No', 'Predicted Yes'], 
+                         index=['Actual No', 'Actual Yes'])
+    st.write(cm_df)
+
+    st.subheader("✅Testing Evaluation")
     st.write("Accuracy:", accuracy_score(y_test, y_test_pred))
     st.write("F1 Score:", f1_score(y_test, y_test_pred, zero_division=0))
     st.text(classification_report(y_test, y_test_pred, zero_division=0))
 
-    st.subheader("🧾 Confusion Matrix (Table View)")
+    st.subheader("Confusion Matrix (Test)")
     cm_table = confusion_matrix(y_test, y_test_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
@@ -731,19 +742,22 @@ elif page == "Prediction":
     y_test_pred = logreg_under.predict(X_test_scaled)
 
     # --- Evaluation ---
-    # st.subheader("Training Evaluation")
-    # st.write("Accuracy:", accuracy_score(y_train_down, y_train_pred))
-    # st.text(classification_report(y_train_down, y_train_pred, zero_division=0))
-
-    st.subheader("Validation Evaluation")
+    st.subheader("✔️ Validation Evaluation")
     st.write("Accuracy:", accuracy_score(y_val, y_val_pred))
     st.text(classification_report(y_val, y_val_pred, zero_division=0))
 
-    st.subheader("Testing Evaluation")
+    st.subheader("Confusion Matrix (Validation)")
+    cm_table = confusion_matrix(y_val, y_val_pred)
+    cm_df = pd.DataFrame(cm_table, 
+                         columns=['Predicted No', 'Predicted Yes'], 
+                         index=['Actual No', 'Actual Yes'])
+    st.write(cm_df)
+
+    st.subheader("✅ Testing Evaluation")
     st.write("Accuracy:", accuracy_score(y_test, y_test_pred))
     st.text(classification_report(y_test, y_test_pred, zero_division=0))
 
-    st.subheader("Confusion Matrix (Table View)")
+    st.subheader("Confusion Matrix (Test)")
     cm_table = confusion_matrix(y_test, y_test_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
@@ -804,25 +818,17 @@ elif page == "Prediction":
     accuracy_test_logReg = accuracy_score(y_test, y_test_logReg_pred)
     accuracy_val_logReg = accuracy_score(y_val, y_val_logReg_pred)
 
-    print("LOGISTIC REGRESSION")
-    print("---------------------")
     classification_report_test_logReg = classification_report(y_test, y_test_logReg_pred, zero_division=0)
     classification_report_val_logReg = classification_report(y_val, y_val_logReg_pred, zero_division=0)
 
-    print("Accuracy (Validation):", accuracy_val_logReg)
-    print("Accuracy (Test):", accuracy_test_logReg)
-    print("\nClassification Report (Validation):\n", classification_report_val_logReg)
-    print("\nClassification Report (Test):\n", classification_report_test_logReg)
+    st.write("✔️ Validation Data Evaluation")
+    st.write("Accuracy:", accuracy_val_logReg)
+    st.text("\nClassification Report (Validation):\n"+ classification_report_val_logReg)
 
-    # cm = confusion_matrix(y_test, y_test_logReg_pred)
-    # disp = ConfusionMatrixDisplay(confusion_matrix=cm)
-    # fig, ax = plt.subplots()
-    # disp.plot(ax=ax, cmap='Blues', colorbar=False)
-    # plt.title("Confusion Matrix - Random Forest")
-    
-    # st.pyplot(fig)
-
-    st.subheader("🧾 Confusion Matrix (Table View)")
+    st.write("✅ Testing Data Evaluation")
+    st.write("Accuracy:", accuracy_test_logReg)
+    st.text("\nClassification Report (Test):\n" + classification_report_test_logReg)
+    st.subheader("Confusion Matrix (Test)")
     cm_table = confusion_matrix(y_test, y_test_logReg_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
