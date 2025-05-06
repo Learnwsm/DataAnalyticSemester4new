@@ -596,7 +596,7 @@ elif page == "Prediction":
     st.text("Classification Report:")
     st.text(classification_report(y_val, y_val_pred, zero_division=0))
 
-    st.subheader("Confusion Matrix (Test)")
+    st.subheader("Confusion Matrix (Validation)")
     cm_table = confusion_matrix(y_val, y_val_pred)
     cm_df = pd.DataFrame(cm_table, 
                          columns=['Predicted No', 'Predicted Yes'], 
@@ -724,8 +724,8 @@ elif page == "Prediction":
     X_train_down = train_downsampled.drop(columns=['HeartAttack'])
     y_train_down = train_downsampled['HeartAttack']
 
-    st.subheader("[Undersampling] Class Distribution")
-    st.write(y_train_down.value_counts())
+    # st.subheader("Class Distribution")
+    # st.write(y_train_down.value_counts())
 
     # --- Scaling ---
     scaler = StandardScaler()
@@ -937,8 +937,8 @@ elif page == "Prediction":
     smote = SMOTE(random_state=42)
     X_train_smote, y_train_smote = smote.fit_resample(X_train, y_train)
 
-    st.subheader("Class distribution after SMOTE oversampling:")
-    st.write(y_train_smote.value_counts())
+    # st.subheader("Class distribution after SMOTE oversampling:")
+    # st.write(y_train_smote.value_counts())
 
     # --- Scaling ---
     scaler = StandardScaler()
@@ -1027,8 +1027,8 @@ elif page == "Prediction":
     X_train_down = train_downsampled.drop(columns=['HeartAttack'])
     y_train_down = train_downsampled['HeartAttack']
 
-    st.subheader("[Undersampling] Class distribution after undersampling:")
-    st.write(y_train_down.value_counts())
+    # st.subheader("Class distribution after undersampling:")
+    # st.write(y_train_down.value_counts())
 
     # --- Scaling ---
     scaler = StandardScaler()
@@ -1044,15 +1044,14 @@ elif page == "Prediction":
         Dropout(0.2),
         Dense(1, activation='sigmoid')
     ])
-
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-    # --- Train Model ---
+    # Train Model
     history = model.fit(X_train_scaled, y_train_down,
                         validation_data=(X_val_scaled, y_val),
                         epochs=50, batch_size=32, verbose=0)
 
-    # --- Predict ---
+    # Predict
     y_train_pred = (model.predict(X_train_scaled) > 0.5).astype(int)
     y_val_pred = (model.predict(X_val_scaled) > 0.5).astype(int)
     y_test_pred = (model.predict(X_test_scaled) > 0.5).astype(int)
